@@ -1,0 +1,8 @@
+# Run the following commands to make this work:
+# git config --local diff.gpg.textconv 'gpg -vo- --no-auto-check-trustdb 2>&1'
+# git config --local diff.gpg-vv.textconv 'gpg -vvo- --no-auto-check-trustdb 2>&1'
+# git config --local diff.gpg.cachetextconv 'false'
+# git config --local diff.gpg-vv.cachetextconv 'false'
+
+*.secrets diff=gpg
+*.gpg diff=gpg-vv
