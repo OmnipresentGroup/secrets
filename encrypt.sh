@@ -26,19 +26,23 @@ if [ -z "$output" ]; then
   fi
 fi
 
-user_keys_path="${here}/user-keys"
-if [ ! -r "${user_keys_path}" ] || find "${here}" -newer "${user_keys_path}" -maxdepth 1 | grep -q ^; then
-  echo >&2 "=> Getting trusted keys..."
-  rm -rf "${user_keys_path}/"
-  mkdir -p "${user_keys_path}/"
-  cat "${here}/trusted-user-keys.txt" | while read -r key_url; do
-    key_filename="$(basename "$key_url" | sed 's/[?].*$//')"
-    curl -sS "$key_url" > "${user_keys_path}/${key_filename}"
-  done
+if [ "${ENCRYPT_TO_USERS_TOO:-}" ]; then
+  user_keys_path="${here}/user-keys"
+  if [ ! -r "${user_keys_path}" ] || find "${here}" -newer "${user_keys_path}" -maxdepth 1 | grep -q ^; then
+    echo >&2 "=> Getting trusted keys..."
+    rm -rf "${user_keys_path}/"
+    mkdir -p "${user_keys_path}/"
+    cat "${here}/trusted-user-keys.txt" | while read -r key_url; do
+      key_filename="$(basename "$key_url" | sed 's/[?].*$//')"
+      curl -sS "$key_url" > "${user_keys_path}/${key_filename}"
+    done
+  fi
+  recipients="$(find "${user_keys_path}" -type f -depth 1 | sed 's/^/--recipient-file /g' | tr '\n' ' ')"
+else
+  recipients=''
 fi
 
 echo >&2 "=> Encrypting ${input} -> ${output} with GPG..."
-recipients="$(find "${user_keys_path}" -type f -depth 1 | sed 's/^/--recipient-file /g' | tr '\n' ' ')"
 (set -x && gpg -sea --yes \
   --recipient-file "${here}"/shared-public.gpg \
   ${recipients} \
