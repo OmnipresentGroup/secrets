@@ -31,11 +31,13 @@ if [ "${CI:-}" ]; then
 fi
 
 if [ "${GPG_PRIVATE_KEY:-}" ]; then
+  # CI systems don't deal well with line-breaks in env vars. To generate the a GPG_PRIVATE_KEY for them, try:
+  # `./decrypt.sh shared-private.gpg.secrets | tr '\n' ',' | pbcopy`
+
   echo >&2 "=> Importing GPG_PRIVATE_KEY..."
   echo "$GPG_PRIVATE_KEY" | sed 's/[,]/\n/g' | gpg --import - >&2
-
-  # CI systems don't deal well with line-breaks in env vars. To generate the a GPG_PRIVATE_KEY for them, try:
-  # `./decrypt.sh ./shared-private.gpg.secrets | tr '\n' ',' | pbcopy`
+else
+  gpg -qd "${here}/shared-private.gpg.secrets" | gpg -q --import -
 fi
 
 # TODO: consider verifying GPG signature of the last commit that changed secrets with:
