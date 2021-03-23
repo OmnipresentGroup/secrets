@@ -3,3 +3,5 @@ https://github.com/jpbochi.gpg
 https://github.com/mattbelanger.gpg
 https://github.com/faizanhaider.gpg
 https://github.com/LauraBeatris.gpg
+https://github.com/kiramdany.gpg
+https://github.com/Pegase745.gpg
