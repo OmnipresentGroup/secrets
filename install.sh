@@ -7,7 +7,7 @@ set -eu
 if [ ! -d ./secrets ]; then
   if [ "${CI:-}" ]; then
     curl -sSL --output - https://github.com/OmnipresentGroup/secrets/archive/refs/heads/main.tar.gz | tar -xvzf -
-    move secrets-main secrets
+    mv secrets-main secrets
   else
     if grep -q 'OmnipresentGroup/secrets' ../secrets/.git/config 2> /dev/null; then
       echo "=> Linking ./secrets to ../secrets …"
