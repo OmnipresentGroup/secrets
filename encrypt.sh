@@ -43,7 +43,10 @@ else
 fi
 
 echo >&2 "=> Encrypting ${input} -> ${output} with GPG..."
+# Writing to a temp file prevents a collision when the input is being piped from the file itself
+tmp_output="$(mktemp)"
 (set -x && gpg -sea --yes \
   --recipient-file "${here}"/shared-public.gpg \
   ${recipients} \
-  -o "${output}" "${input}")
+  -o - "${input}") > "${tmp_output}"
+mv "${tmp_output}" "${output}"
