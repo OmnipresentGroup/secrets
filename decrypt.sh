@@ -37,7 +37,8 @@ if [ "${GPG_PRIVATE_KEY:-}" ]; then
   echo >&2 "=> Importing GPG_PRIVATE_KEY..."
   echo "$GPG_PRIVATE_KEY" | sed 's/[,]/\n/g' | gpg --import - >&2
 else
-  gpg -qd "${here}/shared-private.gpg.secrets" | gpg -q --import -
+  echo >&2 "=> Importing shared-private.gpg..."
+  gpg -qd "${here}/shared-private.gpg.secrets" 2> /dev/null | gpg -q --import -
 fi
 
 # TODO: consider verifying GPG signature of the last commit that changed secrets with:
