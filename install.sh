@@ -1,6 +1,9 @@
 #!/usr/bin/env sh
 set -eu
 
+# This script can be executed via:
+# curl -sSL https://github.com/OmnipresentGroup/secrets/raw/main/install.sh | sh
+
 if [ ! -d ./secrets ]; then
   if [ "${CI:-}" ]; then
     curl -sSL --output - https://github.com/OmnipresentGroup/secrets/archive/refs/heads/main.tar.gz | tar -xvzf -
