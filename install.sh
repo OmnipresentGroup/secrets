@@ -4,7 +4,14 @@ set -eu
 # This script can be executed via:
 # curl -sSL https://github.com/OmnipresentGroup/secrets/raw/main/install.sh | sh
 
-if [ ! -d ./secrets ]; then
+if [ -d ./secrets/.git ]; then
+  echo "=> Secrets repo seems to exist, pulling changes…"
+  (cd secrets && git pull --rebase)
+else
+  if [ -d ./secrets ]; then
+    echo "=> Deleting non-git ./secrets folder …"
+    (set -x && rm -rf ./secrets)
+  fi
   if [ "${CI:-}" ]; then
     curl -sSL --output - https://github.com/OmnipresentGroup/secrets/archive/refs/heads/main.tar.gz | tar -xvzf -
     mv secrets-main secrets
@@ -20,8 +27,6 @@ if [ ! -d ./secrets ]; then
       (set -x && git clone git@github.com:OmnipresentGroup/secrets.git)
     fi
   fi
-else
-  (cd secrets && git pull --rebase)
 fi
 
 
