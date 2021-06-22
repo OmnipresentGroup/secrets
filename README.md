@@ -4,7 +4,9 @@
 
 1. Add an URL to their public keys on [trusted-user-keys.txt](./trusted-user-keys.txt).
 2. Re-encrypt the shared-private.gpg.secrets by running `./re-encrypt-shared-key.sh`.
-3. Submit and merge a PR with the updated file.
+3. Submit a PR with the updated file.
+4. Ask the new person to check out the branch, and run `./test.sh` to verify he/she can decrypt secrets.
+5. It the test passed, merge the PR.
 
 ## How to remove people from the trusted list, Or what to do when secrets are compromised
 
@@ -14,7 +16,7 @@ Beware that simply removing them from the list and re-encrypting the secrets is 
 
 For CI to be able to decrypt secrets, its _private_ GPG key is provided as an environment variable named `GPG_PRIVATE_KEY`.
 
-The recommended way to update the CI/CD key is by generating a new one, wityh the steps below.
+The recommended way to update the CI/CD key is by generating a new one, with the steps below.
 
 1. If you ever imported the CI/CD key before, delete it with:
 
